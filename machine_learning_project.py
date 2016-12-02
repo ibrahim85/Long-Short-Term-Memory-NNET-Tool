@@ -17,9 +17,10 @@ parameters = {
 	"learning_rate": None,
 	"momentum": None,
 	"err_metric": "mean_squared_error",
+	"output_filename": None,
 }
 
-def run_nnet(input_filename, n_layers, n_dropout_layers, optimizer, learning_rate, momentum, err_metric):
+def run_nnet(input_filename, n_layers, n_dropout_layers, optimizer, learning_rate, momentum, err_metric, output_filename):
 	parameters["input_filename"] = input_filename
 	parameters["n_layers"] = n_layers
 	parameters["n_dropout_layers"] = n_dropout_layers
@@ -28,15 +29,16 @@ def run_nnet(input_filename, n_layers, n_dropout_layers, optimizer, learning_rat
 	parameters["momentum"] = momentum
 	if err_metric:
 		parameters["err_metric"] = err_metric
+	parameters["output_filename"] = output_filename
 	run()
 
 # create the inner layers
 def add_layers(layer_dimensions, model):
-		model.add(LSTM(input_dim=layer_dimensions[0], output_dim=layer_dimensions[1], return_sequence=True))
+		model.add(LSTM(input_dim=layer_dimensions[0], output_dim=layer_dimensions[1], return_sequences=True))
 		i = 0
 		for i in range(1, len(layer_dimensions)-2):
-			model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequence=True))
-		model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequence=False))
+			model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=True))
+		model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=False))
 		model.add(Dense(output_dim=layer_dimensions[len(layer_dimensions)-1]))
 		return model
 
@@ -115,3 +117,4 @@ def run():
 	plt.plot(trainPredictPlot)
 	plt.plot(testPredictPlot)
 	plt.show()
+	plt.savefig(parameters["output_filename"]+".png")

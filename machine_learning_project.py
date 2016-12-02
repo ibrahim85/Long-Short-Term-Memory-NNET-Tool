@@ -30,6 +30,16 @@ def run_nnet(input_filename, n_layers, n_dropout_layers, optimizer, learning_rat
 		parameters["err_metric"] = err_metric
 	run()
 
+# create the inner layers
+def add_layers(layer_dimensions, model):
+		model.add(LSTM(input_dim=layer_dimensions[0], output_dim=layer_dimensions[1], return_sequence=True))
+		i = 0
+		for i in range(1, len(layer_dimensions)-2):
+			model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequence=True))
+		model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequence=False))
+		model.add(Dense(output_dim=layer_dimensions[len(layer_dimensions)-1]))
+		return model
+
 # convert an array of values into a dataset matrix
 def create_dataset(dataset, look_back=1):
 	dataX, dataY = [], []
@@ -46,7 +56,7 @@ def run():
 
 	# changed this line to take in command line parameters
 	# dataframe = pandas.read_csv('international-airline-passengers.csv', usecols=[1], engine='python', skipfooter=3)
-	dataframe = pandas.read_csv(parameters["input_filename"], usecols=[1], engine='python', skipfooters=3)
+	dataframe = pandas.read_csv(parameters["input_filename"], usecols=[1], engine='python', skipfooter=3)
 
 	dataset = dataframe.values
 	dataset = dataset.astype('float32')
@@ -69,9 +79,10 @@ def run():
 
 	# changed this line to correspond to command line arguments.
 	# model.add(LSTM(4, input_dim=look_back))
-	model.add(LSTM(parameters["n_layers"], input_dim=look_back))
+	# model.add(LSTM(parameters["n_layers"], input_dim=look_back))
+	model = add_layers([1, 50, 100, 1], model) # Creates the inner layers
 
-	model.add(Dense(1))
+	# model.add(Dense(1))
 
 	# changed this to take from command line
 	# model.compile(loss='mean_squared_error', optimizer='adam')

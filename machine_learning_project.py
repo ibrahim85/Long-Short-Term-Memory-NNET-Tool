@@ -8,6 +8,27 @@ from keras.layers import Dense
 from keras.layers import LSTM
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
+
+parameters = {
+	"input_filename": "",
+	"n_layers": None,
+	"n_dropout_layers": None,
+	"optimizer": "",
+	"learning_rate": None,
+	"momentum": None,
+	"err_metric": "mean_squared_error",
+}
+
+def run_nnet(input_filename, n_layers, n_dropout_layers, optimizer, learning_rate, momentum, err_metric):
+	parameters["input_filename"] = input_filename
+	parameters["n_layers"] = n_layers
+	parameters["n_dropout_layers"] = n_dropout_layers
+	parameters["optimizer"] = optimizer
+	parameters["learning_rate"] = learning_rate
+	parameters["momentum"] = momentum
+	if err_metric:
+		parameters["err_metric"] = err_metric
+
 # convert an array of values into a dataset matrix
 def create_dataset(dataset, look_back=1):
 	dataX, dataY = [], []
@@ -19,7 +40,11 @@ def create_dataset(dataset, look_back=1):
 # fix random seed for reproducibility
 numpy.random.seed(7)
 # load the dataset
-dataframe = pandas.read_csv('international-airline-passengers.csv', usecols=[1], engine='python', skipfooter=3)
+
+# changed this line to take in command line parameters
+# dataframe = pandas.read_csv('international-airline-passengers.csv', usecols=[1], engine='python', skipfooter=3)
+dataframe = pandas.read_csv(parameters["input_filename"], usecols=[1], engine='python', skipfooters=3)
+
 dataset = dataframe.values
 dataset = dataset.astype('float32')
 # normalize the dataset
@@ -38,9 +63,17 @@ trainX = numpy.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
 testX = numpy.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
 # create and fit the LSTM network
 model = Sequential()
-model.add(LSTM(4, input_dim=look_back))
+
+# changed this line to correspond to command line arguments.
+# model.add(LSTM(4, input_dim=look_back))
+model.add(LSTM(parameters["n_layers"], input_dim=look_back))
+
 model.add(Dense(1))
-model.compile(loss='mean_squared_error', optimizer='adam')
+
+# changed this to take from command line
+# model.compile(loss='mean_squared_error', optimizer='adam')
+model.compile(loss=parameters["err_metric"], optimizer=parameters["optimizer"])
+
 model.fit(trainX, trainY, nb_epoch=100, batch_size=1, verbose=2)
 # make predictions
 trainPredict = model.predict(trainX)

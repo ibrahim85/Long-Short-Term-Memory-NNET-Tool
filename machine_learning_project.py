@@ -13,6 +13,7 @@ parameters = {
 	"input_filename": "",
 	"n_layers": None,
 	"n_dropout_layers": None,
+	"layer_dimensions": None,
 	"optimizer": "",
 	"learning_rate": None,
 	"momentum": None,
@@ -20,9 +21,10 @@ parameters = {
 	"output_filename": None,
 }
 
-def run_nnet(input_filename, n_layers, n_dropout_layers, optimizer, learning_rate, momentum, err_metric, output_filename):
+def run_nnet(input_filename, n_layers, n_dropout_layers, layer_dimensions, optimizer, learning_rate, momentum, err_metric, output_filename):
 	parameters["input_filename"] = input_filename
 	parameters["n_layers"] = n_layers
+	parameters["layer_dimensions"] = layer_dimensions
 	parameters["n_dropout_layers"] = n_dropout_layers
 	parameters["optimizer"] = optimizer
 	parameters["learning_rate"] = learning_rate
@@ -82,7 +84,9 @@ def run():
 	# changed this line to correspond to command line arguments.
 	# model.add(LSTM(4, input_dim=look_back))
 	# model.add(LSTM(parameters["n_layers"], input_dim=look_back))
-	model = add_layers([1, 50, 100, 1], model) # Creates the inner layers
+	print "layer dimensions"
+	print parameters["layer_dimensions"]
+	model = add_layers(parameters["layer_dimensions"], model) # Creates the inner layers
 
 	# model.add(Dense(1))
 
@@ -116,5 +120,4 @@ def run():
 	plt.plot(scaler.inverse_transform(dataset))
 	plt.plot(trainPredictPlot)
 	plt.plot(testPredictPlot)
-	plt.show()
 	plt.savefig(parameters["output_filename"]+".png")

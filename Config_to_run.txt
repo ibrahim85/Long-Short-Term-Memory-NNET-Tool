@@ -33,7 +33,7 @@ A) Single hidden layer - we will just vary no: of units - simple network
 vary units from 5-20 and lets see if we can get a good fit.
 
 
-Variation with number of layer 
+B)Variation with number of layer 
 
 1. 3, 1 best value from A 1 adam, default, default,rmse
 2. 4, 1 best value from A 1 adam, default,default,rmse
@@ -64,12 +64,19 @@ Select best learning rate for SGD and apply
 
 ****************************************************************************************
 
-Effect of Weight regularisation
+Effect of Weight regularisation - Select best setting from B and apply weight regularisation
+through LSTM interface given. Set options as below keeping the 
+
+W_regularizer=l2(0.01)
+W_regularizer=l1(0.01)
 
 
 ****************************************************************************************
 
-Effect of Dropout
+Effect of Dropout - Pending
+
+
+
 
 
 

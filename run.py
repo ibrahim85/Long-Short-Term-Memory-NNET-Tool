@@ -15,7 +15,7 @@ def init_args():
     parser.add_argument("-opt", "--optimizer", help="name of the optimizer")
     parser.add_argument("-lr", "--learnrate", help="the learning rate", type=float)
     parser.add_argument("-m", "--momentum", help="the momentum", type=float)
-    parser.add_argument("-trp", "--trainpct", help="training percent (0.0, 1.0]")
+    parser.add_argument("-trp", "--trainpct", help="training percent (0.0, 1.0]", type=float)
     parser.add_argument("-em", "--errmetric", help="type of error metric")
     parser.add_argument("-a", "--append", help="append run configuration to logfile", type=bool, default=False, const=True, nargs="?")
     return parser

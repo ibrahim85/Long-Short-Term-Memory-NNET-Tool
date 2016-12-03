@@ -166,10 +166,11 @@ def plot_and_save(dataset, train_data_prediction, test_data_prediction, scaler, 
     test_prediction_plot_data[:, :] = numpy.nan
     test_prediction_plot_data[len(train_data_prediction)+(look_back*2)+1:len(dataset)-1, :] = test_data_prediction
 
-    plt.plot(scaler.inverse_transform(dataset))
-    plt.plot(train_prediction_plot_data)
-    plt.plot(test_prediction_plot_data)
-    plt.savefig(configuration["output_filename"]+".png")
+    plt.plot(scaler.inverse_transform(dataset), label="dataset")
+    plt.plot(train_prediction_plot_data, label="train prediction")
+    plt.plot(test_prediction_plot_data, label="test prediction")
+    legend = plt.legend(fontsize=17,loc='upper center', bbox_to_anchor=(0.47, -0.10),fancybox=False, shadow=False, ncol=5)
+    plt.savefig(configuration["output_filename"]+".png", bbox_extra_artists=(legend,), bbox_inches='tight')
 
 '''
 Add log corresponding to the given key, to the logfile

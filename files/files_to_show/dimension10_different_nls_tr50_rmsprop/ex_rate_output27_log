@@ -1,0 +1,5 @@
+train-time = 69.930544
+train-RMSE = 2.281766806
+test-RMSE = 7.2208643515
+optimizer=RMSprop, learning_rate=0.0, n_layers=5, layer_dimensions=[1, 10, 10, 10, 1], output_filename=files/files_to_show/dimension10_different_nls_tr50_rmsprop/ex_rate_output27, logfile=files/files_to_show/dimension10_different_nls_tr50_rmsprop/ex_rate_output27_log, training_percent=0.5, input_filename=exchange-rate-twi-may-1970-aug-1.csv, n_dropout_layers=0, err_metric=mean_squared_error, momentum=0.0, 
+

@@ -1,12 +1,6 @@
 Configs
 =======
 
-TODO:
-
- * Need to generate results by changing the learning rate
- * Need to generate results by changing the momentum
- * Need to generate results by changing the number of layers to dropout
-
 ```
 usage: run.py [-h] -i INFILE -o OUTFILE [-lf LOGFILE] [-nl NLAYERS]
               [-ndl NDROPLAYERS] [-ld LAYERDIM [LAYERDIM ...]]
@@ -40,3 +34,10 @@ optional arguments:
   -a [APPEND], --append [APPEND]
                         append run configuration to logfile
 ```
+
+TODO:
+
+ * Need to generate results by changing the learning rate
+ * Need to generate results by changing the momentum
+ * Need to generate results by changing the number of layers to dropout
+

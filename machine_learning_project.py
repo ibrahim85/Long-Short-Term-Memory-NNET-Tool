@@ -1,4 +1,5 @@
-# LSTM for international airline passengers problem with regression framing
+#!usr/bin/python
+
 import numpy
 import matplotlib.pyplot as plt
 import pandas
@@ -9,115 +10,195 @@ from keras.layers import LSTM
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 
-parameters = {
-	"input_filename": "",
-	"n_layers": None,
+# configuration configuration
+configuration = {
+    "input_filename": None,
+    "n_layers": None,
 	"n_dropout_layers": None,
 	"layer_dimensions": None,
-	"optimizer": "",
+	"optimizer": None,
 	"learning_rate": None,
 	"momentum": None,
-	"err_metric": "mean_squared_error",
+    "training_percent": None,
+	"err_metric": None,
 	"output_filename": None,
 }
 
-def run_nnet(input_filename, n_layers, n_dropout_layers, layer_dimensions, optimizer, learning_rate, momentum, err_metric, output_filename):
-	parameters["input_filename"] = input_filename
-	parameters["n_layers"] = n_layers
-	parameters["layer_dimensions"] = layer_dimensions
-	parameters["n_dropout_layers"] = n_dropout_layers
-	parameters["optimizer"] = optimizer
-	parameters["learning_rate"] = learning_rate
-	parameters["momentum"] = momentum
-	if err_metric:
-		parameters["err_metric"] = err_metric
-	parameters["output_filename"] = output_filename
-	run()
+'''
+Setting configuration
 
-# create the inner layers
+Default values,
+    n_layers = 3
+    n_dropout_layers = 0
+    layer_dimensions = [1,4,1]
+    optimizer = adam
+    learning_rate = 0.0
+    momentum = 0.0
+    err_metric = mean_squared_error
+
+Required values,
+    input_filename
+    output_filename
+'''
+def set_configuration(input_filename, output_filename, n_layers=3, n_dropout_layers=0, layer_dimensions=[1,4,1], optimizer="adam", learning_rate=0.0, momentum=0.0, training_percent=0.7, err_metric="mean_squared_error"):
+    # Validation for input_filename and output_filename
+    if not input_filename:
+        raise ValueError("Invalid argument: input_filename")
+    elif not output_filename:
+        raise ValueError("Invalid argument: output_filename")
+
+    # Validation of training and test percent
+    if training_percent == 0.0 or training_percent > 1.0:
+        raise ValueError("Invalid argument: training_percent should be in range (0.0, 1.0)")
+
+    configuration["input_filename"] = input_filename
+    configuration["n_layers"] = n_layers
+    configuration["layer_dimensions"] = layer_dimensions
+    configuration["n_dropout_layers"] = n_dropout_layers
+    configuration["optimizer"] = optimizer
+    configuration["learning_rate"] = learning_rate
+    configuration["momentum"] = momentum
+    configuration["training_percent"] = training_percent
+    configuration["err_metric"] = err_metric
+    configuration["output_filename"] = output_filename
+
+'''
+Create and add the input, hidden and output layers, to a given model.
+
+The number of layers and their dimensions are taken from the configuration
+'''
 def add_layers(layer_dimensions, model):
-		model.add(LSTM(input_dim=layer_dimensions[0], output_dim=layer_dimensions[1], return_sequences=True))
-		i = 0
-		for i in range(1, len(layer_dimensions)-2):
-			model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=True))
-		model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=False))
-		model.add(Dense(output_dim=layer_dimensions[len(layer_dimensions)-1]))
-		return model
+    # Validation
+    if not model:
+        raise ValueError("Invalid argument: model")
 
-# convert an array of values into a dataset matrix
+    model.add(LSTM(input_dim=layer_dimensions[0], output_dim=layer_dimensions[1], return_sequences=True))
+    i = 0
+    for i in range(1, len(layer_dimensions)-2):
+        model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=True))
+    model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=False))
+    model.add(Dense(output_dim=layer_dimensions[len(layer_dimensions)-1]))
+
+# Convert an array of values into a dataset
 def create_dataset(dataset, look_back=1):
-	dataX, dataY = [], []
-	for i in range(len(dataset)-look_back-1):
+    dataX, dataY = [], []
+    for i in range(len(dataset)-look_back-1):
 		a = dataset[i:(i+look_back), 0]
 		dataX.append(a)
 		dataY.append(dataset[i + look_back, 0])
-	return numpy.array(dataX), numpy.array(dataY)
+    return numpy.array(dataX), numpy.array(dataY)
 
-def run():
-	# fix random seed for reproducibility
-	numpy.random.seed(7)
-	# load the dataset
+'''
+Load dataset, normalize it and generate training and test data
 
-	# changed this line to take in command line parameters
-	# dataframe = pandas.read_csv('international-airline-passengers.csv', usecols=[1], engine='python', skipfooter=3)
-	dataframe = pandas.read_csv(parameters["input_filename"], usecols=[1], engine='python', skipfooter=3)
+If improper file then the exception raised by pandas is thrown
+'''
+def load_normalize_and_generate_test_and_training_data():
+    # fix random seed for reproducibility
+    numpy.random.seed(7)
 
-	dataset = dataframe.values
-	dataset = dataset.astype('float32')
-	# normalize the dataset
-	scaler = MinMaxScaler(feature_range=(0, 1))
-	dataset = scaler.fit_transform(dataset)
-	# split into train and test sets
-	train_size = int(len(dataset) * 0.67)
-	test_size = len(dataset) - train_size
-	train, test = dataset[0:train_size,:], dataset[train_size:len(dataset),:]
-	# reshape into X=t and Y=t+1
-	look_back = 1
-	trainX, trainY = create_dataset(train, look_back)
-	testX, testY = create_dataset(test, look_back)
+    # load the dataset
+    dataframe = None
+    try:
+        dataframe = pandas.read_csv(configuration["input_filename"], usecols=[1], engine='python', skipfooter=3)
+    except Exception, e:
+        raise Exception("Error in reading %s: %s", configuration["input_filename"], e)
+    dataset = dataframe.values
+    dataset = dataset.astype('float32')
+
+    # normalize
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    dataset = scaler.fit_transform(dataset)
+
+    # split into train and test sets
+    training_data_size = int(len(dataset) * configuration["training_percent"])
+    test_data_size = len(dataset) - training_data_size
+    training_data, test_data = dataset[0:training_data_size,:], dataset[training_data_size:len(dataset),:]
+    # reshape into X=t and Y=t+1
+    look_back = 1
+    trainX, trainY = create_dataset(training_data, look_back)
+    testX, testY = create_dataset(test_data, look_back)
 	# reshape input to be [samples, time steps, features]
-	trainX = numpy.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
-	testX = numpy.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
-	# create and fit the LSTM network
-	model = Sequential()
+    trainX = numpy.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
+    testX = numpy.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
+    return dataset, trainX, trainY, testX, testY, scaler
 
-	# changed this line to correspond to command line arguments.
-	# model.add(LSTM(4, input_dim=look_back))
-	# model.add(LSTM(parameters["n_layers"], input_dim=look_back))
-	print "layer dimensions"
-	print parameters["layer_dimensions"]
-	model = add_layers(parameters["layer_dimensions"], model) # Creates the inner layers
+# Make predictions
+def predict(trainX, trainY, testX, testY, model, scaler):
+    train_data_prediction = model.predict(trainX)
+    test_data_prediction = model.predict(testX)
 
-	# model.add(Dense(1))
+    # invert predictions
+    train_data_prediction = scaler.inverse_transform(train_data_prediction)
+    trainY = scaler.inverse_transform([trainY])
+    test_data_prediction = scaler.inverse_transform(test_data_prediction)
+    testY = scaler.inverse_transform([testY])
+    return train_data_prediction, test_data_prediction, trainY, testY
 
-	# changed this to take from command line
-	# model.compile(loss='mean_squared_error', optimizer='adam')
-	model.compile(loss=parameters["err_metric"], optimizer=parameters["optimizer"])
+# Evluation
+def evaluate(train_data_prediction, trainY, test_data_prediction, testY, dataset):
+    # calculate root mean squared error
+    trainScore, testScore = None, None
+    if configuration["err_metric"] == "mean_squared_error":
+        trainScore = math.sqrt(mean_squared_error(trainY[0], train_data_prediction[:,0]))
+        print('Train Score: %.2f RMSE' % (trainScore))
+        testScore = math.sqrt(mean_squared_error(testY[0], test_data_prediction[:,0]))
+        print('Test Score: %.2f RMSE' % (testScore))
 
-	model.fit(trainX, trainY, nb_epoch=100, batch_size=1, verbose=2)
-	# make predictions
-	trainPredict = model.predict(trainX)
-	testPredict = model.predict(testX)
-	# invert predictions
-	trainPredict = scaler.inverse_transform(trainPredict)
-	trainY = scaler.inverse_transform([trainY])
-	testPredict = scaler.inverse_transform(testPredict)
-	testY = scaler.inverse_transform([testY])
-	# calculate root mean squared error
-	trainScore = math.sqrt(mean_squared_error(trainY[0], trainPredict[:,0]))
-	print('Train Score: %.2f RMSE' % (trainScore))
-	testScore = math.sqrt(mean_squared_error(testY[0], testPredict[:,0]))
-	print('Test Score: %.2f RMSE' % (testScore))
-	# shift train predictions for plotting
-	trainPredictPlot = numpy.empty_like(dataset)
-	trainPredictPlot[:, :] = numpy.nan
-	trainPredictPlot[look_back:len(trainPredict)+look_back, :] = trainPredict
-	# shift test predictions for plotting
-	testPredictPlot = numpy.empty_like(dataset)
-	testPredictPlot[:, :] = numpy.nan
-	testPredictPlot[len(trainPredict)+(look_back*2)+1:len(dataset)-1, :] = testPredict
-	# plot baseline and predictions
-	plt.plot(scaler.inverse_transform(dataset))
-	plt.plot(trainPredictPlot)
-	plt.plot(testPredictPlot)
-	plt.savefig(parameters["output_filename"]+".png")
+    return trainScore, testScore
+
+# Plot the training and test data
+def plot_and_save(dataset, train_data_prediction, test_data_prediction, scaler, look_back=1):
+    # shift train predictions for plotting
+    train_prediction_plot_data = numpy.empty_like(dataset)
+    train_prediction_plot_data[:, :] = numpy.nan
+    train_prediction_plot_data[look_back:len(train_data_prediction)+look_back, :] = train_data_prediction
+
+    # shift test predictions for plotting
+    test_prediction_plot_data = numpy.empty_like(dataset)
+    test_prediction_plot_data[:, :] = numpy.nan
+    test_prediction_plot_data[len(train_data_prediction)+(look_back*2)+1:len(dataset)-1, :] = test_data_prediction
+
+    plt.plot(scaler.inverse_transform(dataset))
+    plt.plot(train_prediction_plot_data)
+    plt.plot(test_prediction_plot_data)
+    plt.savefig(configuration["output_filename"]+".png")
+
+'''
+Run the neural network
+
+Takes the configuration present in the configuration
+If the configuration was not set, then an exception is raised.
+'''
+def run():
+    dataset, train_data, test_data = None, None, None
+    try:
+        dataset, trainX, trainY, testX, testY, scaler = load_normalize_and_generate_test_and_training_data()
+    except Exception as e:
+        raise e
+
+    # create and fit the LSTM network
+    model = Sequential()
+    # adding layers
+    try:
+        add_layers(configuration["layer_dimensions"], model)
+    except ValueError as vs:
+        raise v
+    model.compile(loss=configuration["err_metric"], optimizer=configuration["optimizer"])
+    model.fit(trainX, trainY, nb_epoch=100, batch_size=1, verbose=2)
+
+    # predict
+    train_data_prediction, test_data_prediction, trainY, testY = predict(trainX, trainY, testX, testY, model, scaler)
+    #evaluate
+    trainScore, testScore = evaluate(train_data_prediction, trainY, test_data_prediction, testY, dataset)
+    # plot and save figure
+    plot_and_save(dataset, train_data_prediction, test_data_prediction, scaler)
+
+'''
+Append run configuration to run_configs file
+'''
+def append_config(filename):
+    file_obj = open(filename, 'a')
+    for k, v in configuration.items():
+	file_obj.write(k+"="+str(v)+", ")
+    file_obj.close()

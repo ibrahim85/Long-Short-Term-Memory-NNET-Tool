@@ -1,4 +1,1 @@
-international-airline-passengers.csv 3 0 1,4,1 adam 0 0 mean_squared_error
-international-airline-passengers.csv 4 0 1,4,4,1 adam 0 0 mean_squared_error
-international-airline-passengers.csv 5 0 1,4,4,4,1 adam 0 0 mean_squared_error
-international-airline-passengers.csv 5 0 1,2,4,2,1 adam 0 0 mean_squared_error
+training_percent=0.7, input_filename=international-airline-passengers.csv, n_dropout_layers=0, optimizer=adam, output_filename=files/output_0, err_metric=mean_squared_error, learning_rate=0.0, n_layers=3, layer_dimensions=[1, 4, 1], momentum=0.0, 

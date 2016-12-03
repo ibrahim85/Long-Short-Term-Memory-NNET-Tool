@@ -9,19 +9,21 @@ from keras.layers import Dense
 from keras.layers import LSTM
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
+import datetime
 
 # configuration configuration
 configuration = {
-    "input_filename": None,
-    "n_layers": None,
+	"input_filename": None,
+	"n_layers": None,
 	"n_dropout_layers": None,
 	"layer_dimensions": None,
 	"optimizer": None,
 	"learning_rate": None,
 	"momentum": None,
-    "training_percent": None,
+	"training_percent": None,
 	"err_metric": None,
 	"output_filename": None,
+	"logfile": None,
 }
 
 '''
@@ -35,21 +37,25 @@ Default values,
     learning_rate = 0.0
     momentum = 0.0
     err_metric = mean_squared_error
+    logfile = [output_filename]_log
 
 Required values,
     input_filename
     output_filename
 '''
-def set_configuration(input_filename, output_filename, n_layers=3, n_dropout_layers=0, layer_dimensions=[1,4,1], optimizer="adam", learning_rate=0.0, momentum=0.0, training_percent=0.7, err_metric="mean_squared_error"):
+def set_configuration(input_filename, output_filename, n_layers=3, n_dropout_layers=0, layer_dimensions=[1,4,1], optimizer="adam", learning_rate=0.0, momentum=0.0, training_percent=0.7, err_metric="mean_squared_error", logfile=None):
     # Validation for input_filename and output_filename
     if not input_filename:
         raise ValueError("Invalid argument: input_filename")
     elif not output_filename:
         raise ValueError("Invalid argument: output_filename")
+    # setting the logfile
+    if not logfile:
+		logfile = output_filename+"_log"
 
     # Validation of training and test percent
     if training_percent == 0.0 or training_percent > 1.0:
-        raise ValueError("Invalid argument: training_percent should be in range (0.0, 1.0)")
+        raise ValueError("Invalid argument: training_percent should be in range (0.0, 1.0]")
 
     configuration["input_filename"] = input_filename
     configuration["n_layers"] = n_layers
@@ -61,6 +67,7 @@ def set_configuration(input_filename, output_filename, n_layers=3, n_dropout_lay
     configuration["training_percent"] = training_percent
     configuration["err_metric"] = err_metric
     configuration["output_filename"] = output_filename
+    configuration["logfile"] = logfile
 
 '''
 Create and add the input, hidden and output layers, to a given model.
@@ -83,9 +90,9 @@ def add_layers(layer_dimensions, model):
 def create_dataset(dataset, look_back=1):
     dataX, dataY = [], []
     for i in range(len(dataset)-look_back-1):
-		a = dataset[i:(i+look_back), 0]
-		dataX.append(a)
-		dataY.append(dataset[i + look_back, 0])
+	a = dataset[i:(i+look_back), 0]
+	dataX.append(a)
+	dataY.append(dataset[i + look_back, 0])
     return numpy.array(dataX), numpy.array(dataY)
 
 '''
@@ -165,6 +172,14 @@ def plot_and_save(dataset, train_data_prediction, test_data_prediction, scaler, 
     plt.savefig(configuration["output_filename"]+".png")
 
 '''
+Add log corresponding to the given key, to the logfile
+'''
+def add_log(logfile, log_type, value):
+	file_obj = open(logfile, 'a')
+	file_obj.write(log_type+" = "+str(value)+"\n")
+	file_obj.close()
+
+'''
 Run the neural network
 
 Takes the configuration present in the configuration
@@ -177,7 +192,8 @@ def run():
     except Exception as e:
         raise e
 
-    # create and fit the LSTM network
+    # create and fit the LSTM network. (Also calculating time taken for the same)
+    start = datetime.datetime.now()
     model = Sequential()
     # adding layers
     try:
@@ -186,6 +202,7 @@ def run():
         raise v
     model.compile(loss=configuration["err_metric"], optimizer=configuration["optimizer"])
     model.fit(trainX, trainY, nb_epoch=100, batch_size=1, verbose=2)
+    training_time_in_seconds = (datetime.datetime.now() - start).total_seconds()
 
     # predict
     train_data_prediction, test_data_prediction, trainY, testY = predict(trainX, trainY, testX, testY, model, scaler)
@@ -193,6 +210,12 @@ def run():
     trainScore, testScore = evaluate(train_data_prediction, trainY, test_data_prediction, testY, dataset)
     # plot and save figure
     plot_and_save(dataset, train_data_prediction, test_data_prediction, scaler)
+    # need to log the training time to logfile
+    print training_time_in_seconds
+    add_log(configuration["logfile"], "train-time", training_time_in_seconds)
+    # need to log the trainScore and testScore to the logfile
+    add_log(configuration["logfile"], "train-RMSE", trainScore)
+    add_log(configuration["logfile"], "test-RMSE", testScore)
 
 '''
 Append run configuration to run_configs file
@@ -201,4 +224,5 @@ def append_config(filename):
     file_obj = open(filename, 'a')
     for k, v in configuration.items():
 	file_obj.write(k+"="+str(v)+", ")
+    file_obj.write("\n\n")
     file_obj.close()

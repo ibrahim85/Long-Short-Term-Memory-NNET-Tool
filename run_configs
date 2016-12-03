@@ -1,1 +1,2 @@
-training_percent=0.7, input_filename=international-airline-passengers.csv, n_dropout_layers=0, optimizer=adam, output_filename=files/output_0, err_metric=mean_squared_error, learning_rate=0.0, n_layers=3, layer_dimensions=[1, 4, 1], momentum=0.0, 
+optimizer=adam, learning_rate=0.0, n_layers=3, layer_dimensions=[1, 6, 1], output_filename=files/ex_rate_output0, logfile=files/ex_rate_output0_log, training_percent=0.7, input_filename=exchange-rate-twi-may-1970-aug-1.csv, n_dropout_layers=0, err_metric=mean_squared_error, momentum=0.0, 
+

@@ -17,7 +17,7 @@ def init_args():
     parser.add_argument("-m", "--momentum", help="the momentum", type=float)
     parser.add_argument("-trp", "--trainpct", help="training percent (0.0, 1.0]")
     parser.add_argument("-em", "--errmetric", help="type of error metric")
-    parser.add_argument("-a", "--append", help="append run configuration to run_configs file", type=bool, default=False, const=True, nargs="?")
+    parser.add_argument("-a", "--append", help="append run configuration to logfile", type=bool, default=False, const=True, nargs="?")
     return parser
 
 if __name__ == "__main__":
@@ -68,4 +68,4 @@ if __name__ == "__main__":
 	machine_learning_project.run()
 	# checking whether to append run configuration to run_configs file
 	if args.append:
-	    machine_learning_project.append_config("run_configs")
+	    machine_learning_project.append_config()

@@ -220,8 +220,8 @@ def run():
 '''
 Append run configuration to run_configs file
 '''
-def append_config(filename):
-    file_obj = open(filename, 'a')
+def append_config():
+    file_obj = open(configuration["logfile"], 'a')
     for k, v in configuration.items():
 	file_obj.write(k+"="+str(v)+", ")
     file_obj.write("\n\n")

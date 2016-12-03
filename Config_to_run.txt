@@ -47,7 +47,7 @@ Select best setting from A and B and run
 
 eg:
 
-sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=False)
 model.compile(loss='mean_squared_error', optimizer=sgd)
 
 1. We will vary the learning rate from the list [1,0.1,0.001,0.002]

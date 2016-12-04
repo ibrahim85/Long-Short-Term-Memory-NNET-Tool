@@ -7,6 +7,9 @@ import math
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
+from keras.optimizers import Adam
+from keras.optimizers import SGD
+from keras.optimizers import RMSprop
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 import datetime
@@ -201,7 +204,15 @@ def run():
         add_layers(configuration["layer_dimensions"], model)
     except ValueError as vs:
         raise v
-    model.compile(loss=configuration["err_metric"], optimizer=configuration["optimizer"])
+    opt = None
+    if configuration["optimizer"] == "adam":
+	opt = Adam(lr=configuration["learning_rate"], beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+    elif configuration["optimizer"] == "SGD":
+	opt = SGD(lr=configuration["learning_rate"])
+    elif configuration["optimizer"] == "RMSprop":
+	opt = RMSprop(lr=configuration["learning_rate"])
+    # model.compile(loss=configuration["err_metric"], optimizer=configuration["optimizer"])
+    model.compile(loss=configuration["err_metric"], optimizer=opt)
     model.fit(trainX, trainY, nb_epoch=100, batch_size=1, verbose=2)
     training_time_in_seconds = (datetime.datetime.now() - start).total_seconds()
 

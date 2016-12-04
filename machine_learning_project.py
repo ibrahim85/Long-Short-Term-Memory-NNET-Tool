@@ -22,6 +22,7 @@ configuration = {
 	"input_filename": None,
 	"n_layers": None,
 	"dropout_fraction_ru": None,
+	"dropout_fraction_rw": None,
 	"layer_dimensions": None,
 	"optimizer": None,
 	"learning_rate": None,
@@ -38,6 +39,7 @@ Setting configuration
 Default values,
     n_layers = 3
     dropout_fraction_ru = 0
+    dropout_fraction_rw = 0
     layer_dimensions = [1,4,1]
     optimizer = adam
     learning_rate = 0.0
@@ -49,7 +51,7 @@ Required values,
     input_filename
     output_filename
 '''
-def set_configuration(input_filename, output_filename, n_layers=3, dropout_fraction_ru=0, layer_dimensions=[1,4,1], optimizer="adam", learning_rate=0.0, momentum=0.0, training_percent=0.7, err_metric="mean_squared_error", logfile=None):
+def set_configuration(input_filename, output_filename, n_layers=3, dropout_fraction_ru=0, dropout_fraction_rw=0, layer_dimensions=[1,4,1], optimizer="adam", learning_rate=0.0, momentum=0.0, training_percent=0.7, err_metric="mean_squared_error", logfile=None):
     # Validation for input_filename and output_filename
     if not input_filename:
         raise ValueError("Invalid argument: input_filename")
@@ -67,6 +69,7 @@ def set_configuration(input_filename, output_filename, n_layers=3, dropout_fract
     configuration["n_layers"] = n_layers
     configuration["layer_dimensions"] = layer_dimensions
     configuration["dropout_fraction_ru"] = dropout_fraction_ru
+    configuration["dropout_fraction_rw"] = dropout_fraction_rw
     configuration["optimizer"] = optimizer
     configuration["learning_rate"] = learning_rate
     configuration["momentum"] = momentum
@@ -79,18 +82,29 @@ def set_configuration(input_filename, output_filename, n_layers=3, dropout_fract
 Create and add the input, hidden and output layers, to a given model.
 
 The number of layers and their dimensions are taken from the configuration
+If dropout_fraction_rw is not default (meaning that it has been specified by the user) then we pick that instead of dropout_fraction_ru
+Else, we pick dropout_fraction_ru instead.
 '''
 def add_layers(layer_dimensions, model):
     # Validation
     if not model:
         raise ValueError("Invalid argument: model")
 
-    model.add(LSTM(input_dim=layer_dimensions[0], output_dim=layer_dimensions[1], return_sequences=True, dropout_U=configuration["dropout_fraction_ru"]))
-    i = 0
-    for i in range(1, len(layer_dimensions)-2):
-        model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=True, dropout_U=configuration["dropout_fraction_ru"]))
-    model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=False, dropout_U=configuration["dropout_fraction_ru"]))
-    model.add(Dense(output_dim=layer_dimensions[len(layer_dimensions)-1]))
+    if configuration["dropout_fraction_rw"] != 0:
+	print "Using DROPUT_FRACTION_RW"
+	model.add(LSTM(input_dim=layer_dimensions[0], output_dim=layer_dimensions[1], return_sequences=True, dropout_W=configuration["dropout_fraction_rw"]))
+        i = 0
+        for i in range(1, len(layer_dimensions)-2):
+            model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=True, dropout_W=configuration["dropout_fraction_ru"]))
+        model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=False, dropout_W=configuration["dropout_fraction_ru"]))
+        model.add(Dense(output_dim=layer_dimensions[len(layer_dimensions)-1]))
+    else:
+        model.add(LSTM(input_dim=layer_dimensions[0], output_dim=layer_dimensions[1], return_sequences=True, dropout_U=configuration["dropout_fraction_ru"]))
+        i = 0
+        for i in range(1, len(layer_dimensions)-2):
+            model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=True, dropout_U=configuration["dropout_fraction_ru"]))
+        model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=False, dropout_U=configuration["dropout_fraction_ru"]))
+        model.add(Dense(output_dim=layer_dimensions[len(layer_dimensions)-1]))
 
 # Convert an array of values into a dataset
 def create_dataset(dataset, look_back=1):

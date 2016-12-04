@@ -14,6 +14,8 @@ from keras.optimizers import Nadam
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 import datetime
+import sys
+sys.stdout = sys.stderr
 
 # configuration configuration
 configuration = {
@@ -207,7 +209,7 @@ def run():
         raise v
     opt = None
     if configuration["optimizer"] == "adam":
-	opt = Adam(lr=configuration["learning_rate"], beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0, momentum=configuration["momentum"])
+	opt = Adam(lr=configuration["learning_rate"], beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
     elif configuration["optimizer"] == "nadam":
 	opt = Nadam(lr=configuration["learning_rate"])
     elif configuration["optimizer"] == "SGD":
@@ -238,6 +240,6 @@ Append run configuration to run_configs file
 def append_config():
     file_obj = open(configuration["logfile"], 'a')
     for k, v in configuration.items():
-	file_obj.write(k+"="+str(v)+", ")
+	file_obj.write(k+"="+str(v)+"\n")
     file_obj.write("\n\n")
     file_obj.close()

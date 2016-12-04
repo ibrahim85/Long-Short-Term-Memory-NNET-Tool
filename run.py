@@ -5,6 +5,7 @@ import sys
 import argparse
 import json
 
+
 def init_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--config", help="input config JSON file")

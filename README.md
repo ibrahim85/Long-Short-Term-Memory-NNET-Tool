@@ -37,7 +37,6 @@ optional arguments:
 
 TODO:
 
- * Need to generate results by changing the learning rate
  * Need to generate results by changing the momentum
  * Need to generate results by changing the number of layers to dropout
 

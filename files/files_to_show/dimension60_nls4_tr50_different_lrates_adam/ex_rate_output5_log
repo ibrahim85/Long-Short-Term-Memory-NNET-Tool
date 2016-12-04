@@ -1,0 +1,5 @@
+train-time = 64.890073
+train-RMSE = 2.44705046019
+test-RMSE = 26.5959525441
+optimizer=adam, learning_rate=0.01, n_layers=4, layer_dimensions=[1, 60, 60, 1], output_filename=files/files_to_show/dimension60_nls4_tr50_different_lrates_adam/ex_rate_output5, logfile=files/files_to_show/dimension60_nls4_tr50_different_lrates_adam/ex_rate_output5_log, training_percent=0.5, input_filename=exchange-rate-twi-may-1970-aug-1.csv, n_dropout_layers=0, err_metric=mean_squared_error, momentum=0.0, 
+

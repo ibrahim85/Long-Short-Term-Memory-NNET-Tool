@@ -74,7 +74,7 @@ if __name__ == "__main__":
 
     # set configuration
     machine_learning_project.set_configuration(input_filename=given["input_filename"],
-        output_filename=given["output_filename"], n_layers=given["n_layers"], dropout_fraction_ru=given["dropout_fraction_ru"], dropout_fraction_rw=["dropout_fraction_rw"],
+        output_filename=given["output_filename"], n_layers=given["n_layers"], dropout_fraction_ru=given["dropout_fraction_ru"], dropout_fraction_rw=given["dropout_fraction_rw"],
 	layer_dimensions=given["layer_dimensions"], optimizer=given["optimizer"], learning_rate=given["learning_rate"], momentum=given["momentum"], training_percent=given["training_percent"],
 	err_metric=given["err_metric"], logfile=given["logfile"])
     # run

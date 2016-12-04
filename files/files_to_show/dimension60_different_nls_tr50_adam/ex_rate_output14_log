@@ -1,5 +1,5 @@
 train-time = 81.555759
 train-RMSE = 2.29391917723
 test-RMSE = 3.80026311424
-optimizer=adam, learning_rate=0.0, n_layers=5, layer_dimensions=[1, 60, 60, 60, 1], output_filename=files/ex_rate_output14, logfile=files/ex_rate_output14_log, training_percent=0.5, input_filename=exchange-rate-twi-may-1970-aug-1.csv, n_dropout_layers=0, err_metric=mean_squared_error, momentum=0.0, 
+optimizer=adam, learning_rate=0.001, n_layers=5, layer_dimensions=[1, 60, 60, 60, 1], output_filename=files/ex_rate_output14, logfile=files/ex_rate_output14_log, training_percent=0.5, input_filename=exchange-rate-twi-may-1970-aug-1.csv, n_dropout_layers=0, err_metric=mean_squared_error, momentum=0.0, 
 

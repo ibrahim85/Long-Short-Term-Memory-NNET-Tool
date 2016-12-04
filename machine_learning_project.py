@@ -10,6 +10,7 @@ from keras.layers import LSTM
 from keras.optimizers import Adam
 from keras.optimizers import SGD
 from keras.optimizers import RMSprop
+from keras.optimizers import Nadam
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 import datetime
@@ -18,7 +19,7 @@ import datetime
 configuration = {
 	"input_filename": None,
 	"n_layers": None,
-	"n_dropout_layers": None,
+	"dropout_fraction_ru": None,
 	"layer_dimensions": None,
 	"optimizer": None,
 	"learning_rate": None,
@@ -34,7 +35,7 @@ Setting configuration
 
 Default values,
     n_layers = 3
-    n_dropout_layers = 0
+    dropout_fraction_ru = 0
     layer_dimensions = [1,4,1]
     optimizer = adam
     learning_rate = 0.0
@@ -46,7 +47,7 @@ Required values,
     input_filename
     output_filename
 '''
-def set_configuration(input_filename, output_filename, n_layers=3, n_dropout_layers=0, layer_dimensions=[1,4,1], optimizer="adam", learning_rate=0.0, momentum=0.0, training_percent=0.7, err_metric="mean_squared_error", logfile=None):
+def set_configuration(input_filename, output_filename, n_layers=3, dropout_fraction_ru=0, layer_dimensions=[1,4,1], optimizer="adam", learning_rate=0.0, momentum=0.0, training_percent=0.7, err_metric="mean_squared_error", logfile=None):
     # Validation for input_filename and output_filename
     if not input_filename:
         raise ValueError("Invalid argument: input_filename")
@@ -63,7 +64,7 @@ def set_configuration(input_filename, output_filename, n_layers=3, n_dropout_lay
     configuration["input_filename"] = input_filename
     configuration["n_layers"] = n_layers
     configuration["layer_dimensions"] = layer_dimensions
-    configuration["n_dropout_layers"] = n_dropout_layers
+    configuration["dropout_fraction_ru"] = dropout_fraction_ru
     configuration["optimizer"] = optimizer
     configuration["learning_rate"] = learning_rate
     configuration["momentum"] = momentum
@@ -82,11 +83,11 @@ def add_layers(layer_dimensions, model):
     if not model:
         raise ValueError("Invalid argument: model")
 
-    model.add(LSTM(input_dim=layer_dimensions[0], output_dim=layer_dimensions[1], return_sequences=True))
+    model.add(LSTM(input_dim=layer_dimensions[0], output_dim=layer_dimensions[1], return_sequences=True, dropout_U=configuration["dropout_fraction_ru"]))
     i = 0
     for i in range(1, len(layer_dimensions)-2):
-        model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=True))
-    model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=False))
+        model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=True, dropout_U=configuration["dropout_fraction_ru"]))
+    model.add(LSTM(input_dim=layer_dimensions[i], output_dim=layer_dimensions[i+1], return_sequences=False, dropout_U=configuration["dropout_fraction_ru"]))
     model.add(Dense(output_dim=layer_dimensions[len(layer_dimensions)-1]))
 
 # Convert an array of values into a dataset
@@ -206,9 +207,11 @@ def run():
         raise v
     opt = None
     if configuration["optimizer"] == "adam":
-	opt = Adam(lr=configuration["learning_rate"], beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+	opt = Adam(lr=configuration["learning_rate"], beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0, momentum=configuration["momentum"])
+    elif configuration["optimizer"] == "nadam":
+	opt = Nadam(lr=configuration["learning_rate"])
     elif configuration["optimizer"] == "SGD":
-	opt = SGD(lr=configuration["learning_rate"])
+	opt = SGD(lr=configuration["learning_rate"], momentum=configuration["momentum"])
     elif configuration["optimizer"] == "RMSprop":
 	opt = RMSprop(lr=configuration["learning_rate"])
     # model.compile(loss=configuration["err_metric"], optimizer=configuration["optimizer"])

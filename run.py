@@ -12,7 +12,7 @@ def init_args():
     parser.add_argument("-o", "--outfile", help="output file")
     parser.add_argument("-lf", "--logfile", help="log file to store the training time & RMSE value")
     parser.add_argument("-nl", "--nlayers", help="number of layers", type=int)
-    parser.add_argument("-ndl", "--ndroplayers", help="number of dropout layers", type=int)
+    parser.add_argument("-df", "--dropout_fraction", help="fraction of number of layers to drop [0.0, 1.0)", type=float)
     parser.add_argument("-ld", "--layerdim", help="layer dimensions", nargs="+", type=int)
     parser.add_argument("-opt", "--optimizer", help="name of the optimizer")
     parser.add_argument("-lr", "--learnrate", help="the learning rate", type=float)
@@ -29,10 +29,10 @@ if __name__ == "__main__":
         "input_filename": args.infile,
         "output_filename": args.outfile,
         "n_layers": 3,
-        "n_dropout_layers": 0,
+        "dropout_fraction_ru": 0,
         "layer_dimensions": [1,4,1],
         "optimizer": "adam",
-        "learning_rate": 0.0,
+        "learning_rate": 0.01,
         "momentum": 0.0,
         "training_percent": 0.7,
         "err_metric": "mean_squared_error",
@@ -46,13 +46,13 @@ if __name__ == "__main__":
         for k, v in jsonDict.iteritems():
 	    given[k] = v
     else:
-        if not args.infile or not args.outfile:
+        if not args.infile or not args.outfile or not args.learnrate:
             parser.print_help()
         else:
             if args.nlayers:
                 given["n_layers"] = args.nlayers
-            if args.ndroplayers:
-                given["n_dropout_layers"] = args.ndroplayers
+            if args.dropout_fraction:
+                given["dropout_fraction_ru"] = args.ndroplayers
             if args.layerdim:
                 given["layer_dimensions"] = args.layerdim
             if args.optimizer:
@@ -70,7 +70,7 @@ if __name__ == "__main__":
 
     # set configuration
     machine_learning_project.set_configuration(input_filename=given["input_filename"],
-        output_filename=given["output_filename"], n_layers=given["n_layers"], n_dropout_layers=given["n_dropout_layers"], layer_dimensions=given["layer_dimensions"],
+        output_filename=given["output_filename"], n_layers=given["n_layers"], dropout_fraction_ru=given["dropout_fraction_ru"], layer_dimensions=given["layer_dimensions"],
         optimizer=given["optimizer"], learning_rate=given["learning_rate"], momentum=given["momentum"], training_percent=given["training_percent"],
         err_metric=given["err_metric"], logfile=given["logfile"])
     # run

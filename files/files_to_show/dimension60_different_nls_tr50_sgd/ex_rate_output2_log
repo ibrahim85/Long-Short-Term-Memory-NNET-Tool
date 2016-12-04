@@ -1,0 +1,5 @@
+train-time = 52.117992
+train-RMSE = 10.1508650531
+test-RMSE = 37.2432037842
+optimizer=SGD, learning_rate=0.01, n_layers=4, layer_dimensions=[1, 60, 60, 1], output_filename=files/files_to_show/dimension60_different_nls_tr50_sgd/ex_rate_output2, logfile=files/files_to_show/dimension60_different_nls_tr50_sgd/ex_rate_output2_log, training_percent=0.5, input_filename=exchange-rate-twi-may-1970-aug-1.csv, n_dropout_layers=0, err_metric=mean_squared_error, momentum=0.0, 
+

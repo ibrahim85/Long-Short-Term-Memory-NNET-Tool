@@ -1,0 +1,16 @@
+train-time = 63.675594
+train-RMSE = 2.40497720845
+test-RMSE = 2.07104792095
+optimizer=adam
+learning_rate=0.001
+n_layers=4
+layer_dimensions=[1, 60, 60, 1]
+output_filename=files/files_to_show/dimension60_nls4_tr50_lrate0.001_different_df_adam/ex_rate_output2
+dropout_fraction_ru=0.2
+logfile=files/files_to_show/dimension60_nls4_tr50_lrate0.001_different_df_adam/ex_rate_output2_log
+training_percent=0.5
+input_filename=exchange-rate-twi-may-1970-aug-1.csv
+err_metric=mean_squared_error
+momentum=0.1
+
+

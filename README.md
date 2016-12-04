@@ -39,4 +39,5 @@ TODO:
 
  * Need to generate results by changing the momentum
  * Need to generate results by changing the number of layers to dropout
-
+ * We need to set up cross validation for all selected models.
+ * Run ARIMA and HMM to show that the machine learning model is better than the statistical models.

@@ -4,6 +4,7 @@ import numpy
 import matplotlib.pyplot as plt
 import pandas
 import math
+from keras.callbacks import History
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
@@ -145,7 +146,7 @@ def load_normalize_and_generate_test_and_training_data():
     look_back = 1
     trainX, trainY = create_dataset(training_data, look_back)
     testX, testY = create_dataset(test_data, look_back)
-	# reshape input to be [samples, time steps, features]
+    # reshape input to be [samples, time steps, features]
     trainX = numpy.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
     testX = numpy.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
     return dataset, trainX, trainY, testX, testY, scaler
@@ -232,7 +233,9 @@ def run():
 	opt = RMSprop(lr=configuration["learning_rate"])
     # model.compile(loss=configuration["err_metric"], optimizer=configuration["optimizer"])
     model.compile(loss=configuration["err_metric"], optimizer=opt)
-    model.fit(trainX, trainY, nb_epoch=100, batch_size=1, verbose=2)
+    # Validation is set to 30%
+    history = History()
+    model.fit(trainX, trainY, nb_epoch=100, batch_size=1, verbose=2, validation_split=0.3, callbacks=[history])
     training_time_in_seconds = (datetime.datetime.now() - start).total_seconds()
 
     # predict
@@ -242,11 +245,12 @@ def run():
     # plot and save figure
     plot_and_save(dataset, train_data_prediction, test_data_prediction, scaler)
     # need to log the training time to logfile
-    print training_time_in_seconds
+    print "Training Time: ", training_time_in_seconds
     add_log(configuration["logfile"], "train-time", training_time_in_seconds)
     # need to log the trainScore and testScore to the logfile
     add_log(configuration["logfile"], "train-RMSE", trainScore)
     add_log(configuration["logfile"], "test-RMSE", testScore)
+    print "Final Cross-Validation result: ", history.history["val_loss"][-1]
 
 '''
 Append run configuration to run_configs file

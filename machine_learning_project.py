@@ -191,6 +191,7 @@ def plot_and_save(dataset, train_data_prediction, test_data_prediction, scaler, 
     plt.plot(train_prediction_plot_data, label="train prediction")
     plt.plot(test_prediction_plot_data, label="test prediction")
     legend = plt.legend(fontsize=17,loc='upper center', bbox_to_anchor=(0.47, -0.10),fancybox=False, shadow=False, ncol=5)
+    plt.show()
     plt.savefig(configuration["output_filename"]+".png", bbox_extra_artists=(legend,), bbox_inches='tight')
 
 '''

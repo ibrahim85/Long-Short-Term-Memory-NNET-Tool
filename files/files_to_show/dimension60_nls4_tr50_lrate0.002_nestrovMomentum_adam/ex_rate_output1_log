@@ -1,0 +1,5 @@
+train-time = 64.169672
+train-RMSE = 2.34298256806
+test-RMSE = 2.92414797305
+optimizer=nadam, learning_rate=0.002, n_layers=4, layer_dimensions=[1, 60, 60, 1], output_filename=files/files_to_show/dimension60_nls4_tr50_lrate0.002_nestrovMomentum_adam/ex_rate_output1, logfile=files/files_to_show/dimension60_nls4_tr50_lrate0.002_nestrovMomentum_adam/ex_rate_output1_log, training_percent=0.5, input_filename=exchange-rate-twi-may-1970-aug-1.csv, n_dropout_layers=0, err_metric=mean_squared_error, momentum=0.1, 
+

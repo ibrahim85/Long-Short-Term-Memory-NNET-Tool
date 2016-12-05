@@ -5,9 +5,9 @@
 	"dropout_fraction_rw": 0.1,
 	"layer_dimensions": [1, 60, 60, 1],
 	"optimizer": "adam",
-	"learning_rate": 0.001,
+	"learning_rate": 0.01,
 	"momentum": 0.1,
 	"training_percent": 0.5,
 	"err_metric": "mean_squared_error",
-	"output_filename": "files/files_to_show/dimension60_nls4_tr50_lrate0.001_different_dfW_adam/ex_rate_output1"
+	"output_filename": "sample_output"
 }

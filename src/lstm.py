@@ -32,6 +32,7 @@ configuration = {
 	"err_metric": None,
 	"output_filename": None,
 	"logfile": None,
+	"epoch": None,
 }
 
 '''
@@ -47,12 +48,13 @@ Default values,
     momentum = 0.0
     err_metric = mean_squared_error
     logfile = [output_filename]_log
+    epoch = 100
 
 Required values,
     input_filename
     output_filename
 '''
-def set_configuration(input_filename, output_filename, n_layers=3, dropout_fraction_ru=0, dropout_fraction_rw=0, layer_dimensions=[1,4,1], optimizer="adam", learning_rate=0.0, momentum=0.0, training_percent=0.7, err_metric="mean_squared_error", logfile=None):
+def set_configuration(input_filename, output_filename, n_layers=3, dropout_fraction_ru=0, dropout_fraction_rw=0, layer_dimensions=[1,4,1], optimizer="adam", learning_rate=0.0, momentum=0.0, training_percent=0.7, err_metric="mean_squared_error", logfile=None, epoch=100):
     # Validation for input_filename and output_filename
     if not input_filename:
         raise ValueError("Invalid argument: input_filename")
@@ -78,6 +80,7 @@ def set_configuration(input_filename, output_filename, n_layers=3, dropout_fract
     configuration["err_metric"] = err_metric
     configuration["output_filename"] = output_filename
     configuration["logfile"] = logfile
+    configuration["epoch"] = epoch
 
 '''
 Create and add the input, hidden and output layers, to a given model.
@@ -237,7 +240,7 @@ def run():
     model.compile(loss=configuration["err_metric"], optimizer=opt)
     # Validation is set to 30%
     history = History()
-    model.fit(trainX, trainY, nb_epoch=10, batch_size=1, verbose=2, validation_split=0.3, callbacks=[history])
+    model.fit(trainX, trainY, nb_epoch=configuration["epoch"], batch_size=1, verbose=2, validation_split=0.3, callbacks=[history])
     training_time_in_seconds = (datetime.datetime.now() - start).total_seconds()
 
     # predict

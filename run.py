@@ -44,11 +44,25 @@ if __name__ == "__main__":
     }
     # Checking for required fields
     if args.config:
-	jsonDict = {}
-	with open(args.config) as dataJSON:
-	    jsonDict = dict(json.loads(dataJSON.read()))
-        for k, v in jsonDict.iteritems():
-	    given[k] = v
+	if not args.infile or not args.outfile:
+	    print "Please provide inputfile and outputfile."
+	    parser.print_help()
+        else:
+	    jsonDict = {}
+	    with open(args.config) as dataJSON:
+	        jsonDict = dict(json.loads(dataJSON.read()))
+            for k, v in jsonDict.iteritems():
+	        given[k] = v
+	    # set configuration
+	    lstm.set_configuration(input_filename=given["input_filename"],
+		output_filename=given["output_filename"], n_layers=given["n_layers"], dropout_fraction_ru=given["dropout_fraction_ru"], dropout_fraction_rw=given["dropout_fraction_rw"],
+		layer_dimensions=given["layer_dimensions"], optimizer=given["optimizer"], learning_rate=given["learning_rate"], momentum=given["momentum"], training_percent=given["training_percent"],
+		err_metric=given["err_metric"], logfile=given["logfile"])
+	    # run
+	    lstm.run()
+	    # checking whether to append run configuration to run_configs file
+	    if args.append:
+		lstm.append_config()
     else:
         if not args.infile or not args.outfile or not args.learnrate:
             parser.print_help()
@@ -73,14 +87,14 @@ if __name__ == "__main__":
                 given["err_metric"] = args.errmetric
 	    if args.logfile:
 	        given["logfile"] = args.logfile
+	    # set configuration
+	    lstm.set_configuration(input_filename=given["input_filename"],
+		output_filename=given["output_filename"], n_layers=given["n_layers"], dropout_fraction_ru=given["dropout_fraction_ru"], dropout_fraction_rw=given["dropout_fraction_rw"],
+		layer_dimensions=given["layer_dimensions"], optimizer=given["optimizer"], learning_rate=given["learning_rate"], momentum=given["momentum"], training_percent=given["training_percent"],
+		err_metric=given["err_metric"], logfile=given["logfile"])
+	    # run
+	    lstm.run()
+	    # checking whether to append run configuration to run_configs file
+	    if args.append:
+		lstm.append_config()
 
-    # set configuration
-    lstm.set_configuration(input_filename=given["input_filename"],
-        output_filename=given["output_filename"], n_layers=given["n_layers"], dropout_fraction_ru=given["dropout_fraction_ru"], dropout_fraction_rw=given["dropout_fraction_rw"],
-	layer_dimensions=given["layer_dimensions"], optimizer=given["optimizer"], learning_rate=given["learning_rate"], momentum=given["momentum"], training_percent=given["training_percent"],
-	err_metric=given["err_metric"], logfile=given["logfile"])
-    # run
-    lstm.run()
-    # checking whether to append run configuration to run_configs file
-    if args.append:
-	lstm.append_config()

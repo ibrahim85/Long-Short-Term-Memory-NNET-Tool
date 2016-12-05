@@ -1,5 +1,4 @@
 {
-	"input_filename": "input_files/exchange-rate-twi-may-1970-aug-1.csv",
 	"n_layers": 4,
 	"dropout_fraction_ru": 0.1,
 	"dropout_fraction_rw": 0.1,
@@ -8,6 +7,5 @@
 	"learning_rate": 0.001,
 	"momentum": 0.1,
 	"training_percent": 0.5,
-	"err_metric": "mean_squared_error",
-	"output_filename": "adam_output"
+	"err_metric": "mean_squared_error"
 }

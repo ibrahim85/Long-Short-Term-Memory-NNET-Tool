@@ -190,9 +190,10 @@ def plot_and_save(dataset, train_data_prediction, test_data_prediction, scaler, 
     plt.plot(scaler.inverse_transform(dataset), label="dataset")
     plt.plot(train_prediction_plot_data, label="train prediction")
     plt.plot(test_prediction_plot_data, label="test prediction")
-    legend = plt.legend(fontsize=17,loc='upper center', bbox_to_anchor=(0.47, -0.10),fancybox=False, shadow=False, ncol=5)
-    plt.show()
+    legend = plt.legend(fontsize=17,loc='upper center', bbox_to_anchor=(0.47, -0.04),fancybox=False, shadow=False, ncol=5)
     plt.savefig(configuration["output_filename"]+".png", bbox_extra_artists=(legend,), bbox_inches='tight')
+    plt.show()
+    plt.close()
 
 '''
 Add log corresponding to the given key, to the logfile
@@ -236,7 +237,7 @@ def run():
     model.compile(loss=configuration["err_metric"], optimizer=opt)
     # Validation is set to 30%
     history = History()
-    model.fit(trainX, trainY, nb_epoch=100, batch_size=1, verbose=2, validation_split=0.3, callbacks=[history])
+    model.fit(trainX, trainY, nb_epoch=10, batch_size=1, verbose=2, validation_split=0.3, callbacks=[history])
     training_time_in_seconds = (datetime.datetime.now() - start).total_seconds()
 
     # predict

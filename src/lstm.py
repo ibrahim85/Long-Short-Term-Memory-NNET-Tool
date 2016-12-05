@@ -243,8 +243,6 @@ def run():
     train_data_prediction, test_data_prediction, trainY, testY = predict(trainX, trainY, testX, testY, model, scaler)
     #evaluate
     trainScore, testScore = evaluate(train_data_prediction, trainY, test_data_prediction, testY, dataset)
-    # plot and save figure
-    plot_and_save(dataset, train_data_prediction, test_data_prediction, scaler)
     # need to log the training time to logfile
     print "Training Time: ", training_time_in_seconds
     add_log(configuration["logfile"], "train-time", training_time_in_seconds)
@@ -252,6 +250,8 @@ def run():
     add_log(configuration["logfile"], "train-RMSE", trainScore)
     add_log(configuration["logfile"], "test-RMSE", testScore)
     print "Final Cross-Validation result: ", history.history["val_loss"][-1]
+    # plot and save figure
+    plot_and_save(dataset, train_data_prediction, test_data_prediction, scaler)
 
 '''
 Append run configuration to run_configs file

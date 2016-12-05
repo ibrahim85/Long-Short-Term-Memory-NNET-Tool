@@ -364,7 +364,7 @@ def load_gui():
 
     browserwindow = Tk()
     browserwindow.wm_title("LSTM tool v0.1.1")
-    browserwindow.resizable(width=False, height=False)
+    browserwindow.resizable(width=True, height=True)
 
     #FRAMES
     parameters_frame = Frame(browserwindow,width=700,height=600)

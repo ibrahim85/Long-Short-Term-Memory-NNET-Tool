@@ -1,7 +1,8 @@
 #!usr/bin/python
 
-import machine_learning_project
 import sys
+sys.path.insert(0, './src')
+import lstm
 import argparse
 import json
 
@@ -74,12 +75,12 @@ if __name__ == "__main__":
 	        given["logfile"] = args.logfile
 
     # set configuration
-    machine_learning_project.set_configuration(input_filename=given["input_filename"],
+    lstm.set_configuration(input_filename=given["input_filename"],
         output_filename=given["output_filename"], n_layers=given["n_layers"], dropout_fraction_ru=given["dropout_fraction_ru"], dropout_fraction_rw=given["dropout_fraction_rw"],
 	layer_dimensions=given["layer_dimensions"], optimizer=given["optimizer"], learning_rate=given["learning_rate"], momentum=given["momentum"], training_percent=given["training_percent"],
 	err_metric=given["err_metric"], logfile=given["logfile"])
     # run
-    machine_learning_project.run()
+    lstm.run()
     # checking whether to append run configuration to run_configs file
     if args.append:
-	machine_learning_project.append_config()
+	lstm.append_config()

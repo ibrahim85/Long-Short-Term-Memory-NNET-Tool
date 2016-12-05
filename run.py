@@ -23,6 +23,7 @@ def init_args():
     parser.add_argument("-trp", "--trainpct", help="training percent (0.0, 1.0]", type=float)
     parser.add_argument("-em", "--errmetric", help="type of error metric")
     parser.add_argument("-a", "--append", help="append run configuration to logfile", type=bool, default=False, const=True, nargs="?")
+    parser.add_argument("-e", "--epoch", help="number of epochs to run", type=int)
     return parser
 
 if __name__ == "__main__":
@@ -41,6 +42,7 @@ if __name__ == "__main__":
         "training_percent": 0.7,
         "err_metric": "mean_squared_error",
         "logfile": None,
+	"epoch": 100,
     }
     # Checking for required fields
     if args.config:
@@ -56,8 +58,8 @@ if __name__ == "__main__":
 	    # set configuration
 	    lstm.set_configuration(input_filename=given["input_filename"],
 		output_filename=given["output_filename"], n_layers=given["n_layers"], dropout_fraction_ru=given["dropout_fraction_ru"], dropout_fraction_rw=given["dropout_fraction_rw"],
-		layer_dimensions=given["layer_dimensions"], optimizer=given["optimizer"], learning_rate=given["learning_rate"], momentum=given["momentum"], training_percent=given["training_percent"],
-		err_metric=given["err_metric"], logfile=given["logfile"])
+		layer_dimensions=given["layer_dimensions"], optimizer=given["optimizer"], learning_rate=given["learning_rate"], momentum=given["momentum"], 
+		training_percent=given["training_percent"], err_metric=given["err_metric"], logfile=given["logfile"], epoch=given["epoch"])
 	    # run
 	    lstm.run()
 	    # checking whether to append run configuration to run_configs file
@@ -87,11 +89,13 @@ if __name__ == "__main__":
                 given["err_metric"] = args.errmetric
 	    if args.logfile:
 	        given["logfile"] = args.logfile
+	    if args.epoch:
+		given["epoch"] = args.epoch
 	    # set configuration
 	    lstm.set_configuration(input_filename=given["input_filename"],
 		output_filename=given["output_filename"], n_layers=given["n_layers"], dropout_fraction_ru=given["dropout_fraction_ru"], dropout_fraction_rw=given["dropout_fraction_rw"],
-		layer_dimensions=given["layer_dimensions"], optimizer=given["optimizer"], learning_rate=given["learning_rate"], momentum=given["momentum"], training_percent=given["training_percent"],
-		err_metric=given["err_metric"], logfile=given["logfile"])
+		layer_dimensions=given["layer_dimensions"], optimizer=given["optimizer"], learning_rate=given["learning_rate"], momentum=given["momentum"], 
+		training_percent=given["training_percent"], err_metric=given["err_metric"], logfile=given["logfile"], epoch=given["epoch"])
 	    # run
 	    lstm.run()
 	    # checking whether to append run configuration to run_configs file

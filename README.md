@@ -10,11 +10,11 @@ Configuration parameters as command-line options
 ================================================
 - Specify the learning rate (default value is 0.01) -- \**required*.  
 
-  ```--learnrate``` => *A very high learning rate might end up missing certain local minima. A very low learning will end up slowing down the learning process.*  
+  	```--learnrate``` => *A very high learning rate might end up missing certain local minima. A very low learning will end up slowing down the learning process.*  
 
 - Specify the number of layers in the neural network.  
 
-  ```--nlayers``` => *Number of layers depends on the number of features that need to be extracted from the data*.  
+  	```--nlayers``` => *Number of layers depends on the number of features that need to be extracted from the data*.  
 
 - Specify the dimensions of each layer in the neural network.  
 

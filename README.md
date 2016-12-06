@@ -10,7 +10,7 @@ Configuration parameters as command-line options
 ================================================
 - Specify the learning rate (default value is 0.01) -- \**required*.  
 
-  	```--learnrate``` => *A very high learning rate might end up missing certain local minima. A very low learning will end up slowing down the learning process.*  
+  	```--learnrate``` => *Determines the step size of the weight update and is critical to the convergence of the algorithm to the global minima of the objective function. A very high learning rate might end up missing certain local minima. A very low learning will end up slowing down the learning process.*  
 
 - Specify the number of layers in the neural network.  
 

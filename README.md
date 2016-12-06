@@ -12,48 +12,36 @@ python run.py --infile <input filename> --outfile <output filename> --learnrate 
 ```
 Other command-line options are given below.
 
-
-Configs
-=======
-
-```
-usage: run.py [-h] [-c CONFIG] [-i INFILE] [-o OUTFILE] [-lf LOGFILE]
-              [-nl NLAYERS] [-dfu DROPOUT_FRACTION_RU]
-              [-dfw DROPOUT_FRACTION_RW] [-ld LAYERDIM [LAYERDIM ...]]
-              [-opt OPTIMIZER] [-lr LEARNRATE] [-m MOMENTUM] [-trp TRAINPCT]
-              [-em ERRMETRIC] [-a [APPEND]] [-e EPOCH]
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -c CONFIG, --config CONFIG
-                        input config JSON file
-  -i INFILE, --infile INFILE
-                        input file (csv)
-  -o OUTFILE, --outfile OUTFILE
-                        output file
-  -lf LOGFILE, --logfile LOGFILE
-                        log file to store the training time & RMSE value
-  -nl NLAYERS, --nlayers NLAYERS
-                        number of layers
-  -dfu DROPOUT_FRACTION_RU, --dropout_fraction_ru DROPOUT_FRACTION_RU
-                        fraction of R_Units to be dropped [0.0, 1.0)
-  -dfw DROPOUT_FRACTION_RW, --dropout_fraction_rw DROPOUT_FRACTION_RW
-                        fraction of input units to be dropped [0.0, 1.0)
-  -ld LAYERDIM [LAYERDIM ...], --layerdim LAYERDIM [LAYERDIM ...]
-                        layer dimensions
-  -opt OPTIMIZER, --optimizer OPTIMIZER
-                        name of the optimizer
-  -lr LEARNRATE, --learnrate LEARNRATE
-                        the learning rate
-  -m MOMENTUM, --momentum MOMENTUM
-                        the momentum
-  -trp TRAINPCT, --trainpct TRAINPCT
-                        training percent (0.0, 1.0]
-  -em ERRMETRIC, --errmetric ERRMETRIC
-                        type of error metric
-  -a [APPEND], --append [APPEND]
-                        append run configuration to logfile
-  -e EPOCH, --epoch EPOCH
-                        number of epochs to run
-
-```
+Command-line options
+====================
+- Specify a config JSON file as input.
+ * --config
+- Specify input filename (.csv) -- \*required.
+ * --infile
+- Specify output filename -- \*required.
+ * --outfile
+- Specify log filename.
+ * --logfile
+- Specify the number of layers in the neural network.
+ * --nlayers
+- Specify the dimensions of each layer in the neural network.
+ * --layerdim
+- Specify the learning rate -- \*required.
+ * --learnrate
+- Specify the fraction of RUnits that are dropped out (value is in range [0.0, 1.0).
+ * --dropout\_fraction\_ru
+- Specify the fraction of input units that are dropped out (value is in range [0.0, 1.0).
+ * --dropout\_fraction\_rw
+- Specify the optimizer.
+ * --optimizer
+- Specify the momentum.
+ * --momentum
+- Specify the training percent (The value is in range (0.0, 1.0]).
+ * --trainpct
+- Specify the error metric.
+ * --errmetric
+- Specify the number of epochs.
+ * --epoch 
+- Append the run configuration to the logfile.
+ * --append
+- 

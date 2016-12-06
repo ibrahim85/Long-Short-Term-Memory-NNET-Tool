@@ -46,7 +46,7 @@ Configuration parameters as command-line options
 
 - Specify the number of epochs.  
 
-  	```--epoch```  
+  	```--epoch``` => *Number of passes through the whole training data*.   
 
 
 

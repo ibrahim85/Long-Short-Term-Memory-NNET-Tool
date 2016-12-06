@@ -22,7 +22,7 @@ Configuration parameters as command-line options
 
 - Specify the fraction of RUnits that are dropped out (value is in range [0.0, 1.0).  
 
-  	```--dropout_fraction_ru``` => *Drop the recurrent connections that remember the past results. Dropping RUnits would reduce exposure to data and hence, prevent overfitting*.  
+  	```--dropout_fraction_ru``` => *Drop a fraction of recurrent connections that remember the past results. Dropping RUnits would reduce exposure to data and hence, prevent overfitting*.  
 
 - Specify the fraction of input units that are dropped out (value is in range [0.0, 1.0).  
 

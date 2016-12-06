@@ -64,21 +64,21 @@ Command-line options
 
   	```--config``` => *Can use this to provide a file containing a JSON with appropriate parameters as the configuration to run the neural network. If config file provided, then all configuration parameters specified (those specified above) on the command-line would be ignored*.  
 
-  *Example config JSON is shown below*,
-  ```json
-  {  
-	"n_layers": 4,  
-	"dropout_fraction_ru": 0.1,  
-	"dropout_fraction_rw": 0.1,  
-	"layer_dimensions": [1, 60, 60, 1],  
-	"optimizer": "adam",  
-	"learning_rate": 0.001,  
-	"momentum": 0.1,  
-	"training_percent": 0.5,  
-	"err_metric": "mean_squared_error",  
-	"epoch": 10  
-  }
-  ```  
+	  *Example config JSON is shown below*,
+	  ```json
+	  {  
+		"n_layers": 4,  
+		"dropout_fraction_ru": 0.1,  
+		"dropout_fraction_rw": 0.1,  
+		"layer_dimensions": [1, 60, 60, 1],  
+		"optimizer": "adam",  
+		"learning_rate": 0.001,  
+		"momentum": 0.1,  
+		"training_percent": 0.5,  
+		"err_metric": "mean_squared_error",  
+		"epoch": 10  
+	  }
+	  ```  
 
 - Specify log filename (default logfile is <outputfile>_log).  
 

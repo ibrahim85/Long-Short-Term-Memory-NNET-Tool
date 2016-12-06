@@ -424,14 +424,10 @@ def load_gui():
     browserwindow.resizable(width=True, height=True)
 
     #FRAMES
-    parameters_frame = Frame(browserwindow,width=700,height=600)
+    parameters_frame = Frame(browserwindow,width=700,height=700)
     output_frame = Frame(browserwindow)
     parameters_frame.pack_propagate(False)
     #output_frame.pack_propagate(False)
-
-    bin_image = PhotoImage(file="images/bin1.png")
-    save_image = PhotoImage(file="images/save.png")
-
 
     #Packing containing FRAMES
     parameters_frame.pack(side=LEFT)
@@ -443,7 +439,7 @@ def load_gui():
     text.pack()
 
     utility_button_frame = Frame(output_frame)
-    clear_button = Button(utility_button_frame,text="Delete Result Buffer",width="15",command=clear)
+    clear_button = Button(utility_button_frame,text="Delete Result Buffer",width="25",command=clear)
 
     utility_button_frame.pack(side=TOP)
     clear_button.grid(row=0)
@@ -535,7 +531,7 @@ def load_gui():
     config_filename_frame = Frame(config_cover_frame)
     config_filename_label = Label(config_filename_frame, text = "Use config file : ")
     config_filename_load_button = Button(config_filename_frame,text= "Browse",width="10",command=fetch_config_file)
-    config_filename_delete_button = Button(config_filename_frame,image=bin_image,width="50",height="22",command=delete_config_file)
+    config_filename_delete_button = Button(config_filename_frame,text="Delete Config",width="15",command=delete_config_file)
 
     config_file_var = StringVar()
     config_file_var.set("")
@@ -544,12 +540,15 @@ def load_gui():
 
     save_button_frame = Frame(parameters_frame)
     save_button_label = Label(save_button_frame,text = "Save config : ")
-    save_button = Button(save_button_frame,image=save_image,width="50",height="22",command=save_as_config_file)
+    save_button = Button(save_button_frame,text="Save Config",width="15",command=save_as_config_file)
 
     buttons_frame = Frame(parameters_frame)
     run_button = Button(parameters_frame,text= "Run",width="10",command=validate_execute)
 
-    masthead_label = Label(parameters_frame,text="Developed by Abhishek Jain, Pradyumna Kaushik and Sreedhar Kumar")
+
+    masthead_frame = Frame(parameters_frame)
+    masthead_frame.config(pady=40)
+    masthead_label = Label(masthead_frame,text="Developed by Abhishek Jain, Pradyumna Kaushik and Sreedhar Kumar")
 
     instruction_label = Label(parameters_frame,text="Upload config JSON file or fill the configurations below",fg="red")
 
@@ -628,6 +627,7 @@ def load_gui():
     run_button.pack()
     save_button.pack()
 
+    masthead_frame.pack()
     masthead_label.pack(side=BOTTOM)
 
     #Run the GUI browserwindow mainloop

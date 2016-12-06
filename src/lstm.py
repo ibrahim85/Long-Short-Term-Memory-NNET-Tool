@@ -254,6 +254,7 @@ def run():
     add_log(configuration["logfile"], "train-RMSE", trainScore)
     add_log(configuration["logfile"], "test-RMSE", testScore)
     print "Final Cross-Validation result: ", history.history["val_loss"][-1]
+    add_log(configuration["logfile"], "Final Cross-validation result", history.history["val_loss"][-1])
     # plot and save figure
     plot_and_save(dataset, train_data_prediction, test_data_prediction, scaler)
 

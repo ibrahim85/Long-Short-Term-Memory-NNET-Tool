@@ -22,9 +22,9 @@ Configuration parameters as command-line options
 - Specify the dimensions of each layer in the neural network.
  * ```--layerdim``` => Number of computation units in each layer.
 - Specify the fraction of RUnits that are dropped out (value is in range [0.0, 1.0).
- * ```--dropout\_fraction\_ru``` => Drop the recurrent connections that remember the past results. Dropping RUnits would reduce exposure to data and hence, prevent overfitting.
+ * ```--dropout_fraction_ru``` => Drop the recurrent connections that remember the past results. Dropping RUnits would reduce exposure to data and hence, prevent overfitting.
 - Specify the fraction of input units that are dropped out (value is in range [0.0, 1.0).
- * ```--dropout\_fraction\_rw``` => Drop fraction of inputs from passing to the next layer in the network. This helps in being more robust to noise.
+ * ```--dropout_fraction_rw``` => Drop fraction of inputs from passing to the next layer in the network. This helps in being more robust to noise.
 - Specify the optimizer.
  * ```--optimizer``` => There are currently three optimizers (Adam, SGD and RMSprop).
 - Specify the momentum.

@@ -95,6 +95,14 @@ Command to run GUI
 python gui.py
 ```
 
+GUI Guide -- Configuration Input
+====================================
 ![](tool_description-images/1.png)
+
+GUI Guide -- Results
+===========================
+![](tool_description-images/2.png)
+
+
 
 

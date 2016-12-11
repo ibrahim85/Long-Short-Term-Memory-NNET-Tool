@@ -1,0 +1,19 @@
+train-time = 1062.102783
+train-RMSE = 19.1762162969
+test-RMSE = 11.4169301638
+Final Cross-validation result = 0.000807629006148
+optimizer=SGD
+learning_rate=0.01
+n_layers=4
+layer_dimensions=[1, 10, 10, 1]
+output_filename=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/apple_data_2010-2016-daily_run4
+dropout_fraction_ru=0
+dropout_fraction_rw=0
+training_percent=0.7
+input_filename=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/input_files/apple_data_2010-2016-daily.csv
+logfile=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/apple_data_2010-2016-daily_run4_log
+epoch=100
+err_metric=mean_squared_error
+momentum=0.0
+
+

@@ -1,0 +1,38 @@
+train-time = 469.304764
+train-RMSE = 0.504410611338
+test-RMSE = 0.579812626089
+Final Cross-validation result = 0.000751732826548
+optimizer=SGD
+learning_rate=0.01
+n_layers=4
+layer_dimensions=[1, 10, 10, 1]
+output_filename=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/cisco_stock_output/cisco_data_2005-2016-daily_run4
+dropout_fraction_ru=0
+dropout_fraction_rw=0
+training_percent=0.7
+input_filename=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/input_files/cisco_data_2005-2016-daily.csv
+logfile=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/cisco_stock_output/cisco_data_2005-2016-daily_run4_log
+epoch=26
+err_metric=mean_squared_error
+momentum=0.0
+
+
+train-time = 456.271914
+train-RMSE = 1.56317283961
+test-RMSE = 1.64346520758
+Final Cross-validation result = 0.0047072885764
+optimizer=SGD
+learning_rate=0.01
+n_layers=4
+layer_dimensions=[1, 10, 10, 1]
+output_filename=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/cisco_stock_output/cisco_data_2005-2016-daily_run4
+dropout_fraction_ru=0
+dropout_fraction_rw=0
+training_percent=0.7
+input_filename=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/input_files/cisco_data_2005-2016-daily.csv
+logfile=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/cisco_stock_output/cisco_data_2005-2016-daily_run4_log
+epoch=24
+err_metric=mean_squared_error
+momentum=0.0
+
+

@@ -1,0 +1,1 @@
+{"training_percent": 0.5, "optimizer": "adam", "learning_rate": 0.001, "n_layers": 4, "epoch": 100, "layer_dimension": [1, 10, 10, 1], "err_metric": "mean_squared_error", "dropout_fraction_ru": 0.0, "dropout_fraction_rw": 0.0, "momentum": 0.0}

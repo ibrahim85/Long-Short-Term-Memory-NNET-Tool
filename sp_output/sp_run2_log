@@ -1,0 +1,4 @@
+train-time = 546.787048
+train-RMSE = 17.3042874429
+test-RMSE = 52.9161588823
+Final Cross-validation result = 0.00036795491922

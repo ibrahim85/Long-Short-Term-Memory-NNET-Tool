@@ -1,0 +1,19 @@
+train-time = 1835.005442
+train-RMSE = 9.36620585867
+test-RMSE = 10.1422689191
+Final Cross-validation result = 0.000375639210806
+optimizer=SGD
+learning_rate=0.01
+n_layers=4
+layer_dimensions=[1, 10, 10, 1]
+output_filename=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/ecg_output_files/ecg_run1
+dropout_fraction_ru=0
+dropout_fraction_rw=0
+training_percent=0.7
+input_filename=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/input_files/ecg.csv
+logfile=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/ecg_output_files/ecg_run1_log
+epoch=25
+err_metric=mean_squared_error
+momentum=0.0
+
+

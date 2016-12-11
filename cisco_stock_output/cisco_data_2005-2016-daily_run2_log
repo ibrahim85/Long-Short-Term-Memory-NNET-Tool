@@ -1,0 +1,19 @@
+train-time = 372.887591
+train-RMSE = 3.73872024373
+test-RMSE = 3.87762907358
+Final Cross-validation result = 0.0255958463428
+optimizer=SGD
+learning_rate=0.01
+n_layers=4
+layer_dimensions=[1, 10, 10, 1]
+output_filename=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/cisco_stock_output/cisco_data_2005-2016-daily_run2
+dropout_fraction_ru=0
+dropout_fraction_rw=0
+training_percent=0.7
+input_filename=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/input_files/cisco_data_2005-2016-daily.csv
+logfile=/Users/pradyumnakaushik/Documents/Pradyu/SUNY Binghamton/CourseWork/MachineLearning/projects/gitrepo/nnet/cisco_stock_output/cisco_data_2005-2016-daily_run2_log
+epoch=20
+err_metric=mean_squared_error
+momentum=0.0
+
+

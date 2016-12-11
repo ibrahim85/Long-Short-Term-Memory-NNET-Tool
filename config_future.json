@@ -1,0 +1,12 @@
+{
+        "n_layers": 4,
+        "dropout_fraction_ru": 0.0,
+        "dropout_fraction_rw": 0.0,
+        "layer_dimensions": [1, 10, 10, 1],
+        "optimizer": "SGD",
+        "learning_rate": 0.01,
+        "momentum": 0.0,
+        "training_percent": 1.0,
+        "err_metric": "mean_squared_error",
+        "epoch": 2
+}

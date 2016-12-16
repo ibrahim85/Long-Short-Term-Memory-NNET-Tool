@@ -4,6 +4,7 @@ import numpy
 import matplotlib.pyplot as plt
 import pandas
 import math
+from keras.callbacks import History
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
@@ -31,6 +32,7 @@ configuration = {
 	"err_metric": None,
 	"output_filename": None,
 	"logfile": None,
+	"epoch": None,
 }
 
 '''
@@ -46,12 +48,13 @@ Default values,
     momentum = 0.0
     err_metric = mean_squared_error
     logfile = [output_filename]_log
+    epoch = 100
 
 Required values,
     input_filename
     output_filename
 '''
-def set_configuration(input_filename, output_filename, n_layers=3, dropout_fraction_ru=0, dropout_fraction_rw=0, layer_dimensions=[1,4,1], optimizer="adam", learning_rate=0.0, momentum=0.0, training_percent=0.7, err_metric="mean_squared_error", logfile=None):
+def set_configuration(input_filename, output_filename, n_layers=3, dropout_fraction_ru=0, dropout_fraction_rw=0, layer_dimensions=[1,4,1], optimizer="adam", learning_rate=0.0, momentum=0.0, training_percent=0.7, err_metric="mean_squared_error", logfile=None, epoch=100):
     # Validation for input_filename and output_filename
     if not input_filename:
         raise ValueError("Invalid argument: input_filename")
@@ -77,6 +80,7 @@ def set_configuration(input_filename, output_filename, n_layers=3, dropout_fract
     configuration["err_metric"] = err_metric
     configuration["output_filename"] = output_filename
     configuration["logfile"] = logfile
+    configuration["epoch"] = epoch
 
 '''
 Create and add the input, hidden and output layers, to a given model.
@@ -145,7 +149,7 @@ def load_normalize_and_generate_test_and_training_data():
     look_back = 1
     trainX, trainY = create_dataset(training_data, look_back)
     testX, testY = create_dataset(test_data, look_back)
-	# reshape input to be [samples, time steps, features]
+    # reshape input to be [samples, time steps, features]
     trainX = numpy.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
     testX = numpy.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
     return dataset, trainX, trainY, testX, testY, scaler
@@ -189,8 +193,10 @@ def plot_and_save(dataset, train_data_prediction, test_data_prediction, scaler, 
     plt.plot(scaler.inverse_transform(dataset), label="dataset")
     plt.plot(train_prediction_plot_data, label="train prediction")
     plt.plot(test_prediction_plot_data, label="test prediction")
-    legend = plt.legend(fontsize=17,loc='upper center', bbox_to_anchor=(0.47, -0.10),fancybox=False, shadow=False, ncol=5)
+    legend = plt.legend(fontsize=17,loc='upper center', bbox_to_anchor=(0.47, -0.04),fancybox=False, shadow=False, ncol=5)
     plt.savefig(configuration["output_filename"]+".png", bbox_extra_artists=(legend,), bbox_inches='tight')
+    plt.show()
+    plt.close()
 
 '''
 Add log corresponding to the given key, to the logfile
@@ -232,21 +238,25 @@ def run():
 	opt = RMSprop(lr=configuration["learning_rate"])
     # model.compile(loss=configuration["err_metric"], optimizer=configuration["optimizer"])
     model.compile(loss=configuration["err_metric"], optimizer=opt)
-    model.fit(trainX, trainY, nb_epoch=100, batch_size=1, verbose=2)
+    # Validation is set to 30%
+    history = History()
+    model.fit(trainX, trainY, nb_epoch=configuration["epoch"], batch_size=1, verbose=2, validation_split=0.3, callbacks=[history])
     training_time_in_seconds = (datetime.datetime.now() - start).total_seconds()
 
     # predict
     train_data_prediction, test_data_prediction, trainY, testY = predict(trainX, trainY, testX, testY, model, scaler)
     #evaluate
     trainScore, testScore = evaluate(train_data_prediction, trainY, test_data_prediction, testY, dataset)
-    # plot and save figure
-    plot_and_save(dataset, train_data_prediction, test_data_prediction, scaler)
     # need to log the training time to logfile
-    print training_time_in_seconds
+    print "Training Time: ", training_time_in_seconds
     add_log(configuration["logfile"], "train-time", training_time_in_seconds)
     # need to log the trainScore and testScore to the logfile
     add_log(configuration["logfile"], "train-RMSE", trainScore)
     add_log(configuration["logfile"], "test-RMSE", testScore)
+    print "Final Cross-Validation result: ", history.history["val_loss"][-1]
+    add_log(configuration["logfile"], "Final Cross-validation result", history.history["val_loss"][-1])
+    # plot and save figure
+    plot_and_save(dataset, train_data_prediction, test_data_prediction, scaler)
 
 '''
 Append run configuration to run_configs file

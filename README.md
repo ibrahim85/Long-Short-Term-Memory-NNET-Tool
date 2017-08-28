@@ -99,9 +99,7 @@ Command-line options
   	```
     --config
     ```
-    *Can use this to provide a file containing a JSON with appropriate parameters as the configuration to run the neural network. If config file provided, then all configuration parameters specified (those specified above) on the command-line would be ignored*.  
-
-	  *Example config JSON is shown below*
+    *Can use this to provide a file containing a JSON with appropriate parameters as the configuration to run the neural network. If config file provided, then all configuration parameters specified (those specified above) on the command-line would be ignored. Example config JSON is shown below,*
 
 	  ```
 	  {  
